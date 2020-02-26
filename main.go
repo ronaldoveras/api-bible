@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strings"
 	"bytes"
+	"os"
 )
 
 type Bible struct{
@@ -45,5 +46,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/api/v1/books", handler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+        port := os.Getenv("PORT")
+	log.Fatal(http.ListenAndServe(port, nil))
 }
