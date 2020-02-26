@@ -47,5 +47,5 @@ func handler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/api/v1/books", handler)
         port := os.Getenv("PORT")
-	log.Fatal(http.ListenAndServe(port, nil))
+	log.Fatal(http.ListenAndServe(":" + port, nil))
 }
