@@ -20,6 +20,7 @@ type Book struct {
 
 func handler(w http.ResponseWriter, r *http.Request) {
 
+	enableCors(&w)
 	data, _ := ioutil.ReadFile("assets/nvi.json")
 	//Correção de erro: https://stackoverflow.com/questions/31398044/got-error-invalid-character-%C3%AF-looking-for-beginning-of-value-from-json-unmar
 	data = bytes.TrimPrefix(data, []byte("\xef\xbb\xbf"))
@@ -47,6 +48,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 func handlerVersiculo(w http.ResponseWriter, r *http.Request) {
 
+	enableCors(&w)
 	id := r.URL.Query().Get("id")
 	cap := r.URL.Query().Get("cap")
 	vs := r.URL.Query().Get("vs")
@@ -73,6 +75,10 @@ func handlerVersiculo(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Erro inesperado. Panico. %v", err)
 	}
 
+}
+
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }
 
 func main() {
