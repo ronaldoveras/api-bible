@@ -67,7 +67,13 @@ func handlerVersiculo(w http.ResponseWriter, r *http.Request) {
 				capInt, _ := strconv.ParseInt(cap, 10, 32)
 				vsInt, _ := strconv.ParseInt(vs, 10, 32)
 
-				sb.WriteString(book.Chapters[capInt-1][vsInt-1])
+				defer func() {
+					if err := recover(); err != nil {
+						sb.WriteString("Ocorreu um erro nos indices de capítulo e versículo.")
+					}
+				}()
+				versicle := book.Chapters[capInt-1][vsInt-1]
+				sb.WriteString(versicle)
 			}
 		}
 		fmt.Fprintf(w, "%v", sb.String())
