@@ -68,8 +68,9 @@ func handlerVersiculo(w http.ResponseWriter, r *http.Request) {
 				vsInt, _ := strconv.ParseInt(vs, 10, 32)
 
 				defer func() {
-					if err != nil {
-						sb.WriteString("Ocorreu um erro nos indices de capítulo e versículo.")
+					if err := recover(); err != nil {
+						log.Println("Ocorreu um erro nos indices de capítulo e versículo.")
+						fmt.Fprintf(w, "Erro inesperado. PENSE NUM ERRO. %v", err)
 					}
 				}()
 				versicle := book.Chapters[capInt-1][vsInt-1]
