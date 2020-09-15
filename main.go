@@ -70,6 +70,7 @@ func handlerVersiculo(w http.ResponseWriter, r *http.Request) {
 				defer func() {
 					if err := recover(); err != nil {
 						log.Println("Ocorreu um erro nos indices de capítulo e versículo.")
+						w.WriteHeader(http.StatusBadRequest)
 						fmt.Fprintf(w, "Erro inesperado. PENSE NUM ERRO. %v", err)
 					}
 				}()
