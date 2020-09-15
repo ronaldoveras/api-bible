@@ -1,10 +1,8 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -21,9 +19,7 @@ type Book struct {
 func handler(w http.ResponseWriter, r *http.Request) {
 
 	enableCors(&w)
-	data, _ := ioutil.ReadFile("assets/nvi.json")
-	//Correção de erro: https://stackoverflow.com/questions/31398044/got-error-invalid-character-%C3%AF-looking-for-beginning-of-value-from-json-unmar
-	data = bytes.TrimPrefix(data, []byte("\xef\xbb\xbf"))
+	data := getData()
 
 	newsList := make([]Book, 0)
 	err := json.NewDecoder(strings.NewReader(string(data))).Decode(&newsList)
@@ -54,9 +50,7 @@ func handlerVersiculo(w http.ResponseWriter, r *http.Request) {
 	vs := r.URL.Query().Get("vs")
 	fmt.Printf("Query %v, %v, %v", id, cap, vs)
 
-	data, _ := ioutil.ReadFile("assets/nvi.json")
-	//Correção de erro: https://stackoverflow.com/questions/31398044/got-error-invalid-character-%C3%AF-looking-for-beginning-of-value-from-json-unmar
-	data = bytes.TrimPrefix(data, []byte("\xef\xbb\xbf"))
+	data := getData()
 
 	newsList := make([]Book, 0)
 	err := json.NewDecoder(strings.NewReader(string(data))).Decode(&newsList)
@@ -71,7 +65,7 @@ func handlerVersiculo(w http.ResponseWriter, r *http.Request) {
 					if err := recover(); err != nil {
 						log.Println("Ocorreu um erro nos indices de capítulo e versículo.")
 						w.WriteHeader(http.StatusBadRequest)
-						fmt.Fprintf(w, "Erro inesperado. PENSE NUM ERRO. %v", err)
+						fmt.Fprintf(w, "Erro inesperado. :; Sorry! Bad Request.")
 					}
 				}()
 				versicle := book.Chapters[capInt-1][vsInt-1]
