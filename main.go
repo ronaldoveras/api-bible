@@ -7,13 +7,15 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	services "github.com/heroku/deploy/services"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
 
 	enableCors(&w)
 
-	dados, err := unMarshallNVI()
+	dados, err := services.UnMarshallNVI()
 	var sb strings.Builder
 	if err == nil {
 		sb.WriteString("[")
@@ -26,7 +28,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			sb.WriteString(strconv.Itoa(len(book.Chapters)))
 			// fmt.Printf("%s contém %d capítulos \n", book.Name, len(book.Chapters))
 			sb.WriteString("\", \"chaptersResume\" : ")
-			sb.WriteString(buildJSONCapitulosVersiculos(book.Chapters))
+			sb.WriteString(services.BuildJSONCapitulosVersiculos(book.Chapters))
 			sb.WriteString("\"}")
 			if i < len(dados)-1 {
 				sb.WriteString(",")
@@ -49,7 +51,7 @@ func handlerVersiculo(w http.ResponseWriter, r *http.Request) {
 	vs := r.URL.Query().Get("vs")
 	fmt.Printf("Query %v, %v, %v", id, cap, vs)
 
-	dados, err := unMarshallNVI()
+	dados, err := services.UnMarshallNVI()
 	var sb strings.Builder
 	if err == nil {
 		for _, book := range dados {
@@ -73,7 +75,7 @@ func handlerVersiculo(w http.ResponseWriter, r *http.Request) {
 				sb.WriteString(",")
 
 				sb.WriteString("\"context\": \"")
-				sb.WriteString(buildContext(capInt, vsInt, book.Chapters[capInt-1]))
+				sb.WriteString(services.BuildContext(capInt, vsInt, book.Chapters[capInt-1]))
 				sb.WriteString("\"")
 				sb.WriteString("}")
 

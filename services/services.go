@@ -1,4 +1,4 @@
-package main
+package services
 
 import (
 	"bytes"
@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"strconv"
 	"strings"
+
+	entities "github.com/heroku/deploy/entities"
 )
 
 func getData() []byte {
@@ -14,14 +16,14 @@ func getData() []byte {
 	return bytes.TrimPrefix(data, []byte("\xef\xbb\xbf"))
 }
 
-func unMarshallNVI() ([]Book, error) {
-	newsList := make([]Book, 0)
+func UnMarshallNVI() ([]entities.Book, error) {
+	newsList := make([]entities.Book, 0)
 	data := getData()
 	err := json.NewDecoder(strings.NewReader(string(data))).Decode(&newsList)
 	return newsList, err
 }
 
-func buildJSONCapitulosVersiculos(chapters [][]string) string {
+func BuildJSONCapitulosVersiculos(chapters [][]string) string {
 	var sb strings.Builder
 	sb.WriteString("[")
 	for i := range chapters {
@@ -38,7 +40,7 @@ func buildJSONCapitulosVersiculos(chapters [][]string) string {
 	return sb.String()
 }
 
-func buildContext(cap int64, vs int64, chapter []string) string {
+func BuildContext(cap int64, vs int64, chapter []string) string {
 	var sb strings.Builder
 	j := vs - 5
 	if j < 0 {
