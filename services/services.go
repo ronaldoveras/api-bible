@@ -32,7 +32,7 @@ func BuildJSONCapitulosVersiculos(chapters [][]string) string {
 		sb.WriteString("\", \"qtdVerse\":\"")
 		sb.WriteString(strconv.Itoa(len(chapters[i])))
 		sb.WriteString("\"}")
-		if i < len(chapters[i])-1 {
+		if i < len(chapters[i]) {
 			sb.WriteString(",")
 		}
 	}
